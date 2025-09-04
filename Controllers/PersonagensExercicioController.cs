@@ -1,18 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RpgApi.Models.Emuns;
 using RpgApi.Models;
 
 namespace RpgApi.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
-    public class PersonagensController : ControllerBase
+    public class PersonagensExercicioController : Controller
     {
-        private static List<Personagem> personagens = new List<Personagem>()
+         private static List<Personagem> personagens = new List<Personagem>()
         {
             //Colar os objetos da lista do chat aqui
             new Personagem() { Id = 1, Nome = "Frodo", PontosVida=100, Forca=17, Defesa=23, Inteligencia=33, Classe=ClasseEnum.Cavaleiro},
@@ -25,58 +28,16 @@ namespace RpgApi.Controllers
             new Personagem() { Id = 8, Nome = "Felipe", PontosVida=1000, Forca=-1000, Defesa=-1000, Inteligencia=-1000, Classe=ClasseEnum.Mendigo }
         };
 
-        [HttpGet("Get")]
-        public IActionResult GetFirst()
+        [HttpGet("GetByNome/{nome}")]
+        public IActionResult GetByNome(string nome)
         {
-            Personagem p = personagens[7];
-            return Ok(p);
+            listaBusca = personagens.Find(p=>p.Nome == nome);
+            if(listaBusca  == null)
+            {
+                return NotFound ("Not Found! Personagem não existe");
+            }
+            return Ok (listaBusca);
         }
-
-        [HttpGet("GetAll")]
-        public IActionResult Get()
-        {
-            return Ok(personagens);
-        }
-
-        [HttpGet("{Id}")]
-        public IActionResult GetSingle(int id)
-        {
-            return Ok(personagens.FirstOrDefault(pe =>pe.Id == id));
-        }
-        [HttpPost]
-        public IActionResult AddPersonagem(Personagem novoPersonagem)
-        {
-            personagens.Add(novoPersonagem);
-            return Ok(personagens);
-        }
-
-        [HttpPut]
-        public IActionResult UpdatePersonagem (Personagem p)
-        {
-            Personagem personagemAlterado = personagens.Find(pers => pers.Id == p.Id);
-            personagemAlterado.Nome = p.Nome;
-            personagemAlterado.PontosVida = p.PontosVida;
-            personagemAlterado.Forca = p.Forca;
-            personagemAlterado.Defesa = p.Defesa;
-            personagemAlterado.Inteligencia = p.Inteligencia;
-            personagemAlterado.Classe = p.Classe;
-
-            return Ok(personagens);
-        }
-        
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            personagens.RemoveAll(pers => pers.Id == id);
-
-            return Ok(personagens);
-
-        }
-
-       
-
-
-
 
     }
 }
