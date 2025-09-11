@@ -1,13 +1,23 @@
+using Microsoft.EntityFrameworkCore;
+using RpgApi.Data;
 internal class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddDbContext<DataContext>(
+            options => 
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoLocal"));
+            }
+        );
+
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
         builder.Services.AddControllers();
+        
 
         var app = builder.Build();
 
