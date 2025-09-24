@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using RpgApi.Models.Emuns;
 
 
+
+
 namespace RpgApi.Data
 {
     public class DataContext : DbContext
@@ -16,6 +18,7 @@ namespace RpgApi.Data
             
         }
         public DbSet<Personagem> TB_PERSONAGENS { get; set; }
+        public DbSet<Armas> TB_ARMAS {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Personagem>().ToTable("TB_PERSONAGENS");    
@@ -31,7 +34,21 @@ namespace RpgApi.Data
                 new Personagem() { Id = 7, Nome = "Radagast", PontosVida=200, Forca=25, Defesa=11, Inteligencia=35, Classe=ClasseEnum.Mago }
 
             ) ;
+
+            modelBuilder.Entity<Armas>().ToTable("TB_ARMAS");
+            modelBuilder.Entity<Armas>().HasData
+            (
+                new Armas (){id = 1, nome = "Anduril" , dano = 10},
+                new Armas (){id = 2, nome = "Sting", dano  = 50},
+                new Armas (){id = 3, nome = "Glamdring", dano = 150},
+                new Armas (){id = 4, nome = "Orcrist", dano = 200},
+                new Armas (){id = 5, nome = "Grond", dano =  80},
+                new Armas (){id = 6, nome = "Axe of Gimli", dano = 99},
+                new Armas (){id = 7, nome = "Espada Dos Nazgul", dano = 60}
+            );
         }
+
+        
 
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
