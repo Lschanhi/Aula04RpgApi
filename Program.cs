@@ -7,9 +7,10 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddDbContext<DataContext>(
-            options => 
+            options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoLocal"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoCasa"));
+                
             }
         );
 
