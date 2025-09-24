@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using RpgApi.Models;
 using Microsoft.EntityFrameworkCore;
 using RpgApi.Models.Emuns;
-
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 
@@ -18,10 +18,13 @@ namespace RpgApi.Data
             
         }
         public DbSet<Personagem> TB_PERSONAGENS { get; set; }
+
         public DbSet<Armas> TB_ARMAS {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Personagem>().ToTable("TB_PERSONAGENS");    
+            modelBuilder.Entity<Personagem>().ToTable("TB_PERSONAGENS");
+            modelBuilder.Entity<Armas>().ToTable("TB_ARMAS");   
 
             modelBuilder.Entity<Personagem>().HasData
             (
@@ -35,7 +38,7 @@ namespace RpgApi.Data
 
             ) ;
 
-            modelBuilder.Entity<Armas>().ToTable("TB_ARMAS");
+            
             modelBuilder.Entity<Armas>().HasData
             (
                 new Armas (){id = 1, nome = "Anduril" , dano = 10},
@@ -53,6 +56,10 @@ namespace RpgApi.Data
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<string>().HaveColumnType("varchar").HaveMaxLength(200);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
 
 
